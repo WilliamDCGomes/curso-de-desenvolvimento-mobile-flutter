@@ -42,16 +42,62 @@ class _HomeState extends State<Home> {
   double dollar;
   double euro;
 
-  void _realChanged(String text){
+  bool resetReal = false;
+  bool resetDollar = false;
+  bool resetEuro = false;
 
+  void _realChanged(String text){
+    double real = 0;
+    if(resetReal){
+      realController.text = text[0];
+      realController.selection = TextSelection.fromPosition(TextPosition(offset: realController.text.length));
+      resetReal = false;
+    }
+    if(!text.isEmpty) {
+      real = double.parse(text);
+    }
+    else{
+      realController.text = "0.00";
+      resetReal = true;
+    }
+    dollarController.text = (real/dollar).toStringAsFixed(2);
+    euroController.text = (real/euro).toStringAsFixed(2);
   }
 
   void _dollarChanged(String text){
-
+    double dollars = 0;
+    if(resetDollar){
+      dollarController.text = text[0];
+      dollarController.selection = TextSelection.fromPosition(TextPosition(offset: dollarController.text.length));
+      resetDollar = false;
+    }
+    if(!text.isEmpty) {
+      dollars = double.parse(text);
+    }
+    else{
+      dollarController.text = "0.00";
+      resetDollar = true;
+    }
+    realController.text = (dollars * dollar).toStringAsFixed(2);
+    euroController.text = (dollars * dollar / euro).toStringAsFixed(2);
   }
 
   void _euroChanged(String text){
-
+    double euros = 0;
+    if(resetEuro){
+      euroController.text = text[0];
+      euroController.selection = TextSelection.fromPosition(TextPosition(offset: euroController.text.length));
+      resetEuro = false;
+    }
+    if(!text.isEmpty) {
+      euros = double.parse(text);
+    }
+    else{
+      euroController.text = "0.00";
+      resetEuro = true;
+    }
+    realController.text = (euros * euro).toStringAsFixed(2);
+    dollarController.text = (euros * euro / dollar).toStringAsFixed(2);
   }
 
   @override
@@ -117,6 +163,6 @@ Widget buildTextField(String label, String prefix, TextEditingController control
     ),
     style: TextStyle(color: Colors.amber, fontSize: 22.0),
     onChanged: f,
-    keyboardType: TextInputType.number,
+    keyboardType: TextInputType.numberWithOptions(decimal: true),
   );
 }
