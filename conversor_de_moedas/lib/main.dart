@@ -57,14 +57,14 @@ class _HomeState extends State<Home> {
               case ConnectionState.waiting:
                 return Center(
                   child: Text("Carregando Dados...",
-                      style: TextStyle(color: Colors.amber, fontSize: 25.0),
+                      style: TextStyle(color: Colors.amber, fontSize: 22.0),
                       textAlign: TextAlign.center),
                 );
               default:
                 if (snapshot.hasError) {
                   return Center(
                     child: Text("Erro ao Carregar Dados :(",
-                        style: TextStyle(color: Colors.amber, fontSize: 25.0),
+                        style: TextStyle(color: Colors.amber, fontSize: 22.0),
                         textAlign: TextAlign.center),
                   );
                 } else {
@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
                             labelStyle: TextStyle(color: Colors.amber),
                             prefixText: "R\$"
                           ),
-                          style: TextStyle(color: Colors.amber, fontSize: 25.0),
+                          style: TextStyle(color: Colors.amber, fontSize: 22.0),
                         ),
                         Divider(),
                         TextField(
@@ -92,7 +92,7 @@ class _HomeState extends State<Home> {
                               labelStyle: TextStyle(color: Colors.amber),
                               prefixText: "US\$"
                           ),
-                          style: TextStyle(color: Colors.amber, fontSize: 25.0),
+                          style: TextStyle(color: Colors.amber, fontSize: 22.0),
                         ),
                         Divider(),
                         TextField(
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
                               labelStyle: TextStyle(color: Colors.amber),
                               prefixText: "£\$"
                           ),
-                          style: TextStyle(color: Colors.amber, fontSize: 25.0),
+                          style: TextStyle(color: Colors.amber, fontSize: 22.0),
                         ),
                       ],
                     ),
