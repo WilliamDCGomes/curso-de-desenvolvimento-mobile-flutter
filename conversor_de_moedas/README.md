@@ -1,4 +1,4 @@
-# conversor_de_moeda
+# conversor_de_moedas
 
 A new Flutter application.
 

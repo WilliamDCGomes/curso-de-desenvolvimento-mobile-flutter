@@ -1,4 +1,4 @@
-name: conversor_de_moeda
+name: conversor_de_moedas
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -23,8 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
   cupertino_icons: ^0.1.2
   http: ^0.12.0+2
 
