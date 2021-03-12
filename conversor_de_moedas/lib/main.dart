@@ -90,7 +90,7 @@ class _HomeState extends State<Home> {
                           decoration: InputDecoration(
                               labelText: "Dolares",
                               labelStyle: TextStyle(color: Colors.amber),
-                              prefixText: "US\$"
+                              prefixText: "US"
                           ),
                           style: TextStyle(color: Colors.amber, fontSize: 22.0),
                         ),
@@ -99,7 +99,7 @@ class _HomeState extends State<Home> {
                           decoration: InputDecoration(
                               labelText: "Euros",
                               labelStyle: TextStyle(color: Colors.amber),
-                              prefixText: "£\$"
+                              prefixText: "€"
                           ),
                           style: TextStyle(color: Colors.amber, fontSize: 22.0),
                         ),
