@@ -14,10 +14,10 @@ class _HomePageState extends State<HomePage> {
   Future<Map> _getGifs() async{
     http.Response response;
     if(_search == null){
-      response = await http.get("https://api.giphy.com/v1/gifs/trending?api_key=KeakpdpTwZVAgFb2uQOptejp5XAI6w6e&limit=30&rating=g");
+      response = await http.get("https://api.giphy.com/v1/gifs/trending?api_key=KeakpdpTwZVAgFb2uQOptejp5XAI6w6e&limit=29&rating=g");
     }
     else{
-      response = await http.get("https://api.giphy.com/v1/gifs/search?api_key=KeakpdpTwZVAgFb2uQOptejp5XAI6w6e&q=$_search&limit=30&offset=$_offSet&rating=g&lang=pt");
+      response = await http.get("https://api.giphy.com/v1/gifs/search?api_key=KeakpdpTwZVAgFb2uQOptejp5XAI6w6e&q=$_search&limit=29&offset=$_offSet&rating=g&lang=pt");
     }
     return json.decode(response.body);
   }
@@ -43,6 +43,12 @@ class _HomePageState extends State<HomePage> {
               ),
               style: TextStyle(color: Colors.white, fontSize: 18.0),
               textAlign: TextAlign.center,
+              onSubmitted: (text){
+                setState(() {
+                  _search = text;
+                  _offSet = 0;
+                });
+              },
             ),
           ),
           Expanded(
@@ -76,6 +82,16 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  
+  int _getCount(List data){
+    if(_search == null){
+      return data.length;
+    }
+    else{
+      return data.length + 1;
+    }
+  }
+  
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot){
     return GridView.builder(
         padding: EdgeInsets.all(10.0),
@@ -84,13 +100,33 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0
         ),
-        itemCount: snapshot.data["data"].length,
+        itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index){
-          return GestureDetector(
-            child: Image.network(snapshot.data["data"][index]["images"]["fixed_height"]["url"],
-            height: 300.0,
-            fit: BoxFit.cover,),
-          );
+          if(_search == null || index < snapshot.data["data"].length) {
+            return GestureDetector(
+              child: Image.network(
+                snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+                height: 300.0,
+                fit: BoxFit.cover,),
+            );
+          }
+          else{
+            return Container(
+              child: GestureDetector(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.add, color: Colors.white, size: 70.0,)
+                  ],
+                ),
+                onTap: (){
+                  setState(() {
+                    _offSet += 19;
+                  });
+                },
+              ),
+            );
+          }
         }
     );
   }
