@@ -1,4 +1,4 @@
-name: buscador_gifs
+name: agenda_contatos
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -28,9 +28,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  http: ^0.12.0+2
-  transparent_image: ^2.0.0
-  share: ^0.5.2
+  sqflite: any
 
 dev_dependencies:
   flutter_test:
