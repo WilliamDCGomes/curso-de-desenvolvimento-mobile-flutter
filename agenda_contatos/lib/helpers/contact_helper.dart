@@ -41,7 +41,8 @@ class ContactHelper{
 
   Future<Contact> getContact(int id) async{
     Database dbContect = await db;
-    List<Map> maps = await dbContect.query(contactTable,
+    List<Map> maps = await dbContect.query(
+      contactTable,
       columns: [idColumn, nameColumn, emailColumn, phoneColumn, imgColumn],
       where: "$idColumn = ?",
       whereArgs: [id]);
@@ -49,6 +50,42 @@ class ContactHelper{
       return Contact.fromMap(maps.first);
     }
     return null;
+  }
+
+  Future<int> deleteContact(int id) async{
+    Database dbContect = await db;
+    return await dbContect.delete(
+        contactTable,
+        where: "$idColumn = ?",
+        whereArgs: [id]);
+  }
+
+  Future<int> updateContact (Contact contact) async {
+    Database dbContect = await db;
+    return await dbContect.update(
+        contactTable, contact.toMap(),
+        where: "$idColumn = ?",
+        whereArgs: [contact.id]);
+  }
+
+  Future<List> getAllcontacts() async {
+    Database dbContect = await db;
+    List<Map> listMap = await dbContect.query("SELECT * FROM $contactTable");
+    List<Contact> listContact = List();
+    for(Map m in listMap){
+      listContact.add(Contact.fromMap(m));
+    }
+    return listContact;
+  }
+
+  Future<int> getNumber() async {
+    Database dbContect = await db;
+    return Sqflite.firstIntValue(await dbContect.rawQuery("SELECT COUNT(*) FROM $contactTable"));
+  }
+
+  Future close() async {
+    Database dbContect = await db;
+    dbContect.close();
   }
 
 }
