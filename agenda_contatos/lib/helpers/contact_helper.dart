@@ -15,7 +15,7 @@ class ContactHelper{
   ContactHelper.internal();
   Database _db;
   Future<Database> get db async{
-    id(_db != null){
+    if(_db != null){
       return _db;
     }
     else{
@@ -109,7 +109,7 @@ class Contact{
       nameColumn: name,
       emailColumn: email,
       phoneColumn: phone,
-      imgColumn> img
+      imgColumn: img
     };
     if(id != null){
       map[idColumn] = id;
