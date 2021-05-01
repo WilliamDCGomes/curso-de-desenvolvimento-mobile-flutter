@@ -27,9 +27,14 @@ class _JogoState extends State<Jogo> {
               textAlign: TextAlign.center,
             ),
           ),
-          Image.asset(
-            'images/padrao.png',
-            height: 150,
+          GestureDetector(
+            onTap: (){
+
+            },
+            child: Image.asset(
+              'images/padrao.png',
+              height: 150,
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 32, bottom: 16),
