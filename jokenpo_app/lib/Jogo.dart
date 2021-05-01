@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Jogo extends StatefulWidget {
@@ -6,6 +8,35 @@ class Jogo extends StatefulWidget {
 }
 
 class _JogoState extends State<Jogo> {
+  var _imagemApp = AssetImage("images/padrao.png");
+  String resu = "Escolha uma opção abaixo";
+  int maquina = -1;
+  _maquinaEscolhe(){
+    maquina = Random().nextInt(3);
+    if(maquina == 0)
+      setState(() {this._imagemApp = AssetImage("images/pedra.png"); });
+    else if(maquina == 1)
+      setState(() {this._imagemApp = AssetImage("images/papel.png"); });
+    else if(maquina == 2)
+      setState(() {this._imagemApp = AssetImage("images/tesoura.png"); });
+  }
+  _opcaoSelecionada(int op){
+    if(op == maquina)
+      setState(() {resu = "Empate!!!"; });
+    else if(op == 0 && maquina == 1)
+      setState(() {resu = "Você perdeu!!!"; });
+    else if(op == 0 && maquina == 2)
+      setState(() {resu = "Você venceu!!!"; });
+    else if(op == 1 && maquina == 0)
+      setState(() {resu = "Você venceu!!!"; });
+    else if(op == 1 && maquina == 2)
+      setState(() {resu = "Você perdeu!!!"; });
+    else if(op == 2 && maquina == 0)
+      setState(() {resu = "Você perdeu!!!"; });
+    else if(op == 2 && maquina == 1)
+      setState(() {resu = "Você venceu!!!"; });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,19 +58,13 @@ class _JogoState extends State<Jogo> {
               textAlign: TextAlign.center,
             ),
           ),
-          GestureDetector(
-            onTap: (){
-
-            },
-            child: Image.asset(
-              'images/padrao.png',
-              height: 150,
-            ),
+          Image(
+            image: this._imagemApp,
           ),
           Padding(
             padding: EdgeInsets.only(top: 32, bottom: 16),
             child: Text(
-              "Você perdeu :(",
+              resu,
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold
@@ -50,17 +75,26 @@ class _JogoState extends State<Jogo> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Image.asset(
-                'images/pedra.png',
-                height: 100,
+              GestureDetector(
+                onTap: (){
+                  _maquinaEscolhe();
+                  _opcaoSelecionada(0);
+                },
+                child: Image.asset('images/pedra.png', height: 100),
               ),
-              Image.asset(
-                'images/papel.png',
-                height: 100,
+              GestureDetector(
+                onTap: (){
+                  _maquinaEscolhe();
+                  _opcaoSelecionada(1);
+                },
+                child: Image.asset('images/papel.png', height: 100),
               ),
-              Image.asset(
-                'images/tesoura.png',
-                height: 100,
+              GestureDetector(
+                onTap: (){
+                  _maquinaEscolhe();
+                  _opcaoSelecionada(2);
+                },
+                child: Image.asset('images/tesoura.png', height: 100),
               ),
             ],
           )
