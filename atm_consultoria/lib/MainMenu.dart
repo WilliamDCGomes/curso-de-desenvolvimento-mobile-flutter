@@ -1,3 +1,7 @@
+import 'package:atm_consultoria/ClientScreen.dart';
+import 'package:atm_consultoria/CompanyScreen.dart';
+import 'package:atm_consultoria/ContactScreen.dart';
+import 'package:atm_consultoria/ServiceScreen.dart';
 import 'package:flutter/material.dart';
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -8,16 +12,36 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   void _abrirEmpresa(){
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomeCompany()
+        )
+    );
   }
   void _abrirServico(){
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomeService()
+        )
+    );
   }
   void _abrirClientes(){
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomeClient()
+        )
+    );
   }
   void _abrirContato(){
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomeContact()
+        )
+    );
   }
   @override
   Widget build(BuildContext context) {
