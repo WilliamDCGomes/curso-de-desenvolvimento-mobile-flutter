@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff70c393),
+      backgroundColor: Color(0xff61bd86),
       body: Container(
         alignment: Alignment.center,
         child: Column(
