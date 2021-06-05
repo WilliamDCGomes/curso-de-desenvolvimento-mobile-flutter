@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
   }
   @override
   Widget build(BuildContext context) {
+    _convertMoney();
     return Scaffold(
       body: Container(
         child: Column(
