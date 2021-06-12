@@ -31,7 +31,39 @@ class _HomeState extends State<Home> {
               return ListTile(
                 title: Text(_items[index]["titulo"]),
                 subtitle: Text(_items[index]["descricao"]),
-
+                onTap: (){
+                  showDialog(
+                      context: context,
+                      builder: (context){
+                        return AlertDialog(
+                          title: Text(_items[index]["titulo"]),
+                          content: Text(_items[index]["descricao"]),
+                          actions: <Widget>[
+                            FlatButton(
+                                color: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0)
+                                ),
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                child: Text("OK")
+                            ),
+                            FlatButton(
+                                color: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0)
+                                ),
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                child: Text("CANCELAR")
+                            ),
+                          ],
+                        );
+                      }
+                  );
+                },
               );
             },
 
