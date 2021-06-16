@@ -54,7 +54,9 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: screens[_currentIndex],
+      body: SafeArea(
+        child: screens[_currentIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index){
