@@ -7,6 +7,7 @@ import 'screens/emalta.dart';
 import 'screens/inicio.dart';
 
 class Home extends StatefulWidget {
+  String result = "";
 
   @override
   _HomeState createState() => _HomeState();
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [
-      Inicio(),
+      Inicio(widget.result),
       EmAlta(),
       Inscricoes(),
       Biblioteca(),
@@ -44,10 +45,13 @@ class _HomeState extends State<Home> {
           IconButton(
               icon: Icon(Icons.search),
               onPressed: () async {
-                String result = await showSearch(
+                widget.result = await showSearch(
                     context: context,
                     delegate: CustomSearchDelegate()
                 );
+                setState(() {
+                  widget.result = widget.result;
+                });
               }
           ),
           IconButton(
