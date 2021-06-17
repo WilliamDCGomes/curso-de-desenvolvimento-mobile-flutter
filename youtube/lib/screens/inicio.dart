@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:youtube/model/video.dart';
-
+import 'package:flutter_youtube/flutter_youtube.dart';
 import '../Api.dart';
 
 class Inicio extends StatefulWidget {
@@ -32,70 +32,79 @@ class _InicioState extends State<Inicio> {
             if(snapshot.hasData){
               return ListView.separated(
                   itemBuilder: (context, index){
-                    return Column(
-                      children: <Widget>[
-                        Container(
-                          height: MediaQuery.of(context).size.height * .35,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(snapshot.data[index].image),
-                            )
+                    return GestureDetector(
+                      onTap: (){
+                        FlutterYoutube.playYoutubeVideoById(
+                            apiKey: CHAVE_YOUTUBE_API,
+                            videoId: snapshot.data[index].id,
+                            autoPlay: true
+                        );
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: MediaQuery.of(context).size.height * .35,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(snapshot.data[index].image),
+                                )
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Text(
-                                snapshot.data[index].title,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25
+                          Container(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text(
+                                  snapshot.data[index].title,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    snapshot.data[index].channelTitle,
-                                    style: TextStyle(
-                                      color: Color(0xffF0F0F0),
-                                      fontSize: 20
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      snapshot.data[index].channelTitle,
+                                      style: TextStyle(
+                                          color: Color(0xffF0F0F0),
+                                          fontSize: 20
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    ".",
-                                    style: TextStyle(
-                                        color: Color(0xffF0F0F0),
-                                        fontSize: 20
+                                    SizedBox(
+                                      width: 5,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    snapshot.data[index].publishedAt,
-                                    style: TextStyle(
-                                      color: Color(0xffF0F0F0),
-                                      fontSize: 20
+                                    Text(
+                                      ".",
+                                      style: TextStyle(
+                                          color: Color(0xffF0F0F0),
+                                          fontSize: 20
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      snapshot.data[index].publishedAt,
+                                      style: TextStyle(
+                                          color: Color(0xffF0F0F0),
+                                          fontSize: 20
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
                     );
                   },
                   separatorBuilder: (context, index) => SizedBox(
