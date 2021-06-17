@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youtube/CustomSearchDelegate.dart';
 import 'package:youtube/screens/incricoes.dart';
 
 import 'screens/biblioteca.dart';
@@ -42,8 +43,11 @@ class _HomeState extends State<Home> {
           ),
           IconButton(
               icon: Icon(Icons.search),
-              onPressed: (){
-
+              onPressed: () async {
+                String result = await showSearch(
+                    context: context,
+                    delegate: CustomSearchDelegate()
+                );
               }
           ),
           IconButton(
