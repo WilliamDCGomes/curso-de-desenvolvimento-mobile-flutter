@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class Home extends StatefulWidget {
 
   @override
@@ -6,15 +7,28 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String savedText = "Nada salvo! ";
+  String savedText = "Nada salvo!";
   TextEditingController text = TextEditingController();
 
-  void _salvar(){
-
+  void _salvar() async {
+    String tapedValue = text.text;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("nome", tapedValue);
   }
 
-  void _recuperar(){
+  void _recuperar() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      savedText = prefs.getString("nome");
+    });
+  }
 
+  void _remover() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("nome");
+    setState(() {
+      savedText = "Nada salvo!";
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -65,6 +79,19 @@ class _HomeState extends State<Home> {
                       color: Color(0xff2ca0f5),
                       child: Text(
                         "Ler",
+                        style: TextStyle(
+                            color: Colors.white
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    child: RaisedButton(
+                      onPressed: _remover,
+                      color: Color(0xff2ca0f5),
+                      child: Text(
+                        "Remover",
                         style: TextStyle(
                             color: Colors.white
                         ),
