@@ -9,12 +9,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Task> test = List<Task>();
+  List<Task> taskList = List<Task>();
   void _loadList(){
-    test.clear();
-    test.add(Task("Ir ao mercado", false));
-    test.add(Task("estudar", false));
-    test.add(Task("teste", true));
+    taskList.clear();
+    taskList.add(Task("Ir ao mercado", false));
+    taskList.add(Task("estudar", false));
+    taskList.add(Task("teste", true));
   }
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class _HomeState extends State<Home> {
       ),
       body: Container(
         child: ListView.builder(
-          itemCount: test.length,
+          itemCount: taskList.length,
           itemBuilder: (context, index){
             return CheckboxListTile(
               activeColor: Colors.purple,
-              title: Text(test[index].title),
-              value: test[index].isCompleted,
+              title: Text(taskList[index].title),
+              value: taskList[index].isCompleted,
               onChanged: (va){
 
               }
@@ -50,6 +50,46 @@ class _HomeState extends State<Home> {
           Icons.add,
           color: Colors.white,
         ),
+        onPressed: (){
+          showDialog(
+              context: context,
+              builder: (context){
+                return AlertDialog(
+                  title: Text("Adicionar Tarefa"),
+                  content: TextField(
+                    decoration: InputDecoration(
+                      labelText: "Digite sua tarefa"
+                    ),
+                    onChanged: (text){
+                      Navigator.pop(context);
+                    },
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          "Cancelar",
+                          style: TextStyle(
+                            color: Colors.purple
+                          ),
+                        )
+                    ),
+                    FlatButton(
+                        onPressed: (){
+
+                        },
+                        child: Text(
+                          "Salvar",
+                          style: TextStyle(
+                              color: Colors.purple
+                          ),
+                        )
+                    ),
+                  ],
+                );
+              }
+          );
+        },
       ),
     );
   }
