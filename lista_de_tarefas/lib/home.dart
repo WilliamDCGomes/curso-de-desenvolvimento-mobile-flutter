@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'tasks.dart';
 
 class Home extends StatefulWidget {
@@ -9,16 +12,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Task> taskList = List<Task>();
+  List taskList = List();
   void _loadList(){
-    taskList.clear();
-    taskList.add(Task("Ir ao mercado", false));
-    taskList.add(Task("estudar", false));
-    taskList.add(Task("teste", true));
+    Map<String, dynamic> tasks = Map();
+    tasks["title"] = "Ir ao mercado";
+    tasks["isFinished"] = false;
+    taskList.add(tasks);
   }
+
+  _save() async {
+    final directory = await getApplicationDocumentsDirectory();
+    var file =  File("${directory.path}/dados.json");
+    _loadList();
+    String data = json.encode(taskList);
+    file.writeAsString(data);
+  }
+
   @override
   Widget build(BuildContext context) {
-    _loadList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
