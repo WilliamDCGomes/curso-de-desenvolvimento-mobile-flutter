@@ -20,12 +20,36 @@ class _HomeState extends State<Home> {
     taskList.add(tasks);
   }
 
-  _save() async {
+  Future<File> _getFile() async{
     final directory = await getApplicationDocumentsDirectory();
-    var file =  File("${directory.path}/dados.json");
+    return File("${directory.path}/dados.json");
+  }
+
+  _save() async {
+    var file = await _getFile();
     _loadList();
     String data = json.encode(taskList);
     file.writeAsString(data);
+  }
+
+  _readFile() async {
+    try{
+      final file = await  _getFile();
+      return file.readAsString();
+    }
+    catch(e){
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _readFile().then((data){
+      setState(() {
+        taskList = json.decode(data);
+      });
+    });
   }
 
   @override
@@ -46,9 +70,9 @@ class _HomeState extends State<Home> {
           itemBuilder: (context, index){
             return CheckboxListTile(
               activeColor: Colors.purple,
-              title: Text(taskList[index].title),
-              value: taskList[index].isCompleted,
-              onChanged: (va){
+              title: Text(taskList[index]["title"]),
+              value: taskList[index]["isFinished"],
+              onChanged: (boo){
 
               }
             );
