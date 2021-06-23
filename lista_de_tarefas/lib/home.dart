@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'tasks.dart';
 
 class Home extends StatefulWidget {
 
@@ -13,6 +12,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List taskList = List();
+  var _taskController = TextEditingController();
   void _loadList(){
     Map<String, dynamic> tasks = Map();
     tasks["title"] = "Ir ao mercado";
@@ -23,6 +23,18 @@ class _HomeState extends State<Home> {
   Future<File> _getFile() async{
     final directory = await getApplicationDocumentsDirectory();
     return File("${directory.path}/dados.json");
+  }
+
+  _saveTasks(){
+    String tappedText = _taskController.text;
+    Map<String, dynamic> tasks = Map();
+    tasks["title"] = _taskController.text;
+    tasks["isFinished"] = false;
+    setState(() {
+      taskList.add(tasks);
+    });
+    _save();
+    _taskController.text = "";
   }
 
   _save() async {
@@ -72,8 +84,11 @@ class _HomeState extends State<Home> {
               activeColor: Colors.purple,
               title: Text(taskList[index]["title"]),
               value: taskList[index]["isFinished"],
-              onChanged: (boo){
-
+              onChanged: (value){
+                setState(() {
+                  taskList[index]["isFinished"] = value;
+                });
+                _saveTasks();
               }
             );
           },
@@ -92,12 +107,10 @@ class _HomeState extends State<Home> {
                 return AlertDialog(
                   title: Text("Adicionar Tarefa"),
                   content: TextField(
+                    controller: _taskController,
                     decoration: InputDecoration(
                       labelText: "Digite sua tarefa"
                     ),
-                    onChanged: (text){
-                      Navigator.pop(context);
-                    },
                   ),
                   actions: <Widget>[
                     FlatButton(
@@ -111,7 +124,8 @@ class _HomeState extends State<Home> {
                     ),
                     FlatButton(
                         onPressed: (){
-
+                          _saveTasks();
+                          Navigator.pop(context);
                         },
                         child: Text(
                           "Salvar",
