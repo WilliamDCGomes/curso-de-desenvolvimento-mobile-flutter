@@ -12,6 +12,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List taskList = List();
+  Map<String, dynamic> _removedTask = Map();
   var _taskController = TextEditingController();
   void _loadList(){
     Map<String, dynamic> tasks = Map();
@@ -26,7 +27,6 @@ class _HomeState extends State<Home> {
   }
 
   _saveTasks(){
-    String tappedText = _taskController.text;
     Map<String, dynamic> tasks = Map();
     tasks["title"] = _taskController.text;
     tasks["isFinished"] = false;
@@ -39,14 +39,13 @@ class _HomeState extends State<Home> {
 
   _save() async {
     var file = await _getFile();
-    _loadList();
     String data = json.encode(taskList);
     file.writeAsString(data);
   }
 
   _readFile() async {
     try{
-      final file = await  _getFile();
+      final file = await _getFile();
       return file.readAsString();
     }
     catch(e){
@@ -66,11 +65,26 @@ class _HomeState extends State<Home> {
 
   Widget createListItem(context, index){
     return Dismissible(
-      key: Key(taskList[index]["title"]),
+      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       direction: DismissDirection.endToStart,
       onDismissed: (direction){
+        _removedTask = taskList[index];
         taskList.removeAt(index);
-        _saveTasks();
+        _save();
+        final snackbar = SnackBar(
+          duration: Duration(seconds: 3),
+          content: Text("Tarefa removida!"),
+          action: SnackBarAction(
+            label: "Desfazer",
+            onPressed: (){
+              setState(() {
+                taskList.insert(index, _removedTask);
+              });
+              _save();
+            },
+          ),
+        );
+        Scaffold.of(context).showSnackBar(snackbar);
       },
       background: Container(
         color: Colors.red,
