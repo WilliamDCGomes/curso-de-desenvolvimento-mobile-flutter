@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
   _getDataBase() async {
     final dataBasePath = await getDatabasesPath();
     final dataBaseLocal = join(dataBasePath, "banco.db");
-    var getData = await openDatabase(
+    return await openDatabase(
       dataBaseLocal,
       version: 1,
       onCreate: (db, dbVersion){
@@ -28,8 +28,20 @@ class _HomeState extends State<Home> {
       },
     );
   }
+
+  _save() async {
+    Database db = await _getDataBase();
+    Map<String, dynamic> userData = {
+      "name": "William Douglas",
+      "age": 23
+    };
+    int id = await db.insert("user", userData);
+    print("Testes " + id.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
+    _save();
     return Container();
   }
 }
