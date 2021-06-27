@@ -39,6 +39,12 @@ class _HomeState extends State<Home> {
     print("Testes " + id.toString());
   }
 
+  _listUsers() async {
+    Database db = await _getDataBase();
+    List users = await db.rawQuery("SELECT * FROM user");
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     _save();
