@@ -42,7 +42,41 @@ class _HomeState extends State<Home> {
   _listUsers() async {
     Database db = await _getDataBase();
     List users = await db.rawQuery("SELECT * FROM user");
-    
+
+  }
+
+  _getUser(int id) async {
+    Database db = await _getDataBase();
+    List user = await db.query(
+        "users",
+        columns: ["id", "name", "age"],
+        where: "id = ?",
+        whereArgs: [id]
+    );
+  }
+
+  _deleteUser(int id) async{
+    Database db = await _getDataBase();
+    int getReturn = await db.delete(
+      "user",
+      where: "id = ?",
+      whereArgs: [id]
+    );
+  }
+
+  _updateUser(int id) async{
+    Database db = await _getDataBase();
+
+    Map<String, dynamic> userData = {
+      "name": "William Douglas Costa Gomes",
+      "age": 23
+    };
+    int getReturns = await db.update(
+      "user",
+      userData,
+      where: "id = ?",
+      whereArgs: [id]
+    );
   }
 
   @override
