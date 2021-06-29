@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:minhas_anotacoes/model/Anotacao.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -12,10 +13,11 @@ class AnotacaoHelper{
   }
 
   get db async{
-    if(db != null)
-      return db;
+    if(_db != null)
+      return _db;
     else{
-
+      _db = await inicializeDB();
+      return _db;
     }
   }
 
@@ -32,6 +34,11 @@ class AnotacaoHelper{
       onCreate: _onCreate
     );
     return db;
+  }
+
+  Future<int> salvarAnotacao(Anotacao anotacao) async {
+    var dataBase = await db;
+    return await dataBase.insert("anotacao", anotacao.toMap());
   }
 
 }

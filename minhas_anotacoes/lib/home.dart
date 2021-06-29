@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:minhas_anotacoes/helper/anotacaoHelper.dart';
+import 'package:minhas_anotacoes/model/Anotacao.dart';
 
 class Home extends StatefulWidget {
 
@@ -9,6 +11,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var _titleController = TextEditingController();
   var _descriptionController = TextEditingController();
+  var _db = AnotacaoHelper();
   _showCadastreScreen(){
     showDialog(
         context: context,
@@ -46,7 +49,7 @@ class _HomeState extends State<Home> {
               ),
               FlatButton(
                   onPressed: (){
-
+                    _salvarAnotacao();
                     Navigator.pop(context);
                   },
                   child: Text(
@@ -58,6 +61,14 @@ class _HomeState extends State<Home> {
         }
     );
   }
+
+  _salvarAnotacao() async {
+    String title = _titleController.text;
+    String description = _descriptionController.text;
+    Anotacao anotacao = Anotacao(title, description, DateTime.now().toString());
+    int result = await _db.salvarAnotacao(anotacao);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
