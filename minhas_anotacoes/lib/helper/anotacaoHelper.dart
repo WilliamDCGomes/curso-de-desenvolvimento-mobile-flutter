@@ -22,7 +22,7 @@ class AnotacaoHelper{
   }
 
   _onCreate(Database db, int version) async {
-    await db.execute("CREATE TABLE anotacao (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR, description TEXT, data DATETIME)");
+    await db.execute("CREATE TABLE anotacao (id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR, description TEXT, data varchar)");
   }
 
   inicializeDB() async {
@@ -41,4 +41,8 @@ class AnotacaoHelper{
     return await dataBase.insert("anotacao", anotacao.toMap());
   }
 
+  recuperarAnotacoes() async {
+    var dataBase = await db;
+    return await dataBase.rawQuery("SELECT * FROM anotacao ORDER BY data DESC");
+  }
 }

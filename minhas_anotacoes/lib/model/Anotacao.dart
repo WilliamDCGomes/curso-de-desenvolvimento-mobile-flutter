@@ -10,10 +10,17 @@ class Anotacao {
     Map<String, dynamic> map = {
       "title": title,
       "description": description,
-      "date": date
+      "data": date
     };
     if(id != null)
       map["id"] = id;
     return map;
+  }
+
+  Anotacao.fromMap(Map map){
+    id = map["id"];
+    title = map["title"];
+    description = map["description"];
+    date = map["data"];
   }
 }
