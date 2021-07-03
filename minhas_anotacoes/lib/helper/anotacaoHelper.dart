@@ -41,6 +41,11 @@ class AnotacaoHelper{
     return await dataBase.insert("anotacao", anotacao.toMap());
   }
 
+  Future<int> atualizarAnotacao(Anotacao anotacao) async {
+    var dataBase = await db;
+    return await dataBase.update("anotacao", anotacao.toMap(), where: "id = ?", whereArgs: [anotacao.id]);
+  }
+
   recuperarAnotacoes() async {
     var dataBase = await db;
     return await dataBase.rawQuery("SELECT * FROM anotacao ORDER BY data DESC");

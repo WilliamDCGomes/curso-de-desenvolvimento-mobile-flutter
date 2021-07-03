@@ -14,12 +14,20 @@ class _HomeState extends State<Home> {
   var _descriptionController = TextEditingController();
   var _db = AnotacaoHelper();
   List<Anotacao> anotacoes = List<Anotacao>();
-  _showCadastreScreen(){
+  _showCadastreScreen({Anotacao anotacao}){
+    String title = "Adicionar anotação";
+    String buttonText = "Salvar";
+    if(anotacao != null){
+      _titleController.text = anotacao.title;
+      _descriptionController.text = anotacao.description;
+      title = "Atualizar anotações";
+      buttonText = "Atualizar";
+    }
     showDialog(
         context: context,
         builder: (context){
           return AlertDialog(
-            title: Text("Adicionar anotação"),
+            title: Text(title),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -51,11 +59,11 @@ class _HomeState extends State<Home> {
               ),
               FlatButton(
                   onPressed: (){
-                    _salvarAnotacao();
+                    _salvarAnotacao(anotacaoSelecionada: anotacao);
                     Navigator.pop(context);
                   },
                   child: Text(
-                    "Salvar"
+                    buttonText
                   )
               ),
             ],
@@ -74,11 +82,19 @@ class _HomeState extends State<Home> {
     });
   }
 
-  _salvarAnotacao() async {
+  _salvarAnotacao({Anotacao anotacaoSelecionada}) async {
     String title = _titleController.text;
     String description = _descriptionController.text;
-    Anotacao anotacao = Anotacao(title, description, DateTime.now().toString());
-    int result = await _db.salvarAnotacao(anotacao);
+    if(anotacaoSelecionada == null) {
+      Anotacao anotacao = Anotacao(title, description, DateTime.now().toString());
+      int result = await _db.salvarAnotacao(anotacao);
+    }
+    else {
+      anotacaoSelecionada.title = title;
+      anotacaoSelecionada.description = description;
+      anotacaoSelecionada.date = DateTime.now().toString();
+      int result = await _db.atualizarAnotacao(anotacaoSelecionada);
+    }
     _titleController.clear();
     _descriptionController.clear();
     _recuperarAnotacoes();
@@ -119,6 +135,30 @@ class _HomeState extends State<Home> {
                     child: ListTile(
                       title: Text(anotacoes[index].title),
                       subtitle: Text("${_formatDate(anotacoes[index].date)} - ${anotacoes[index].description}"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () => _showCadastreScreen(anotacao: anotacoes[index]),
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 16),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+
+                            },
+                            child: Icon(
+                              Icons.remove_circle,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }
