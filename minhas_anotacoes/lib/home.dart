@@ -99,6 +99,10 @@ class _HomeState extends State<Home> {
     _descriptionController.clear();
     _recuperarAnotacoes();
   }
+  _removerAnotacao(int id) async {
+    int result = await _db.removerAnotacao(id);
+    _recuperarAnotacoes();
+  }
 
   _formatDate(String date){
     initializeDateFormatting("pt_BR");
@@ -150,7 +154,34 @@ class _HomeState extends State<Home> {
                           ),
                           GestureDetector(
                             onTap: (){
-
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                          "Deseja mesmo excluir essa anotação?"),
+                                      actions: [
+                                        FlatButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text(
+                                                "Não"
+                                            )
+                                        ),
+                                        FlatButton(
+                                            onPressed: () {
+                                              _removerAnotacao(
+                                                  anotacoes[index].id);
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(
+                                                "Sim"
+                                            )
+                                        ),
+                                      ],
+                                    );
+                                  }
+                              );
                             },
                             child: Icon(
                               Icons.remove_circle,

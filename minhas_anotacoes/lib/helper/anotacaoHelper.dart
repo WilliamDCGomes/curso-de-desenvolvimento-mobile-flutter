@@ -46,6 +46,11 @@ class AnotacaoHelper{
     return await dataBase.update("anotacao", anotacao.toMap(), where: "id = ?", whereArgs: [anotacao.id]);
   }
 
+  Future<int> removerAnotacao(int id) async {
+    var dataBase = await db;
+    return await dataBase.delete("anotacao", where: "id = ?", whereArgs: [id]);
+  }
+
   recuperarAnotacoes() async {
     var dataBase = await db;
     return await dataBase.rawQuery("SELECT * FROM anotacao ORDER BY data DESC");
