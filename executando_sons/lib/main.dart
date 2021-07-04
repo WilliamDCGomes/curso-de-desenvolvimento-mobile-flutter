@@ -20,9 +20,11 @@ class _HomeState extends State<Home> {
   AudioPlayer audioPlayer = AudioPlayer();
   AudioCache audioCache = AudioCache(prefix: "audios/");
   bool firstExecutation = true;
+  double volume = 0.5;
   executar() async {
     //int result = await audioPlayer.play("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
     if(firstExecutation) {
+      audioPlayer.setVolume(volume);
       audioPlayer = await audioCache.play("musica.mp3");
       firstExecutation = false;
     }
@@ -64,13 +66,15 @@ class _HomeState extends State<Home> {
       body: Column(
         children: <Widget>[
           Slider(
-            value: 5,
-            max: 10,
+            value: volume,
+            max: 1,
             min: 0,
+            divisions: 10,
             onChanged: (value){
               setState(() {
-
+                volume = value;
               });
+              audioPlayer.setVolume(volume);
             },
           ),
           Row(
