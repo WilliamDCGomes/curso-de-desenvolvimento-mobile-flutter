@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firestore.instance.collection("usuarios").document("pontuacao").setData({
+    "William": "250",
+    "Ana": "590"
+  });
   runApp(MaterialApp(
     home: Home(),
     debugShowCheckedModeBanner: false,
   ));
 }
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Home extends StatelessWidget {
 
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Container();
   }
 }
+
