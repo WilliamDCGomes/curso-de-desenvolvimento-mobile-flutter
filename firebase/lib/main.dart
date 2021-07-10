@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Firestore.instance.collection("usuarios").document("pontuacao").setData({
-    "William": "250",
+    "William": "1000",
     "Ana": "590"
   });
   runApp(MaterialApp(
