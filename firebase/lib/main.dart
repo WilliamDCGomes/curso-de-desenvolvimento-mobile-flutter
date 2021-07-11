@@ -19,13 +19,26 @@ void main() async {
   );
 
   print("id salvo " + ref.documentID);
-  */
+  *//*
   db.collection("noticias").document("xaoeZxJhS4HTAWjnRpFZ").setData(
       {
         "titulo": "Novo planeta é descoberto Alterado",
         "descricao": "Texto de exemplo...."
       }
-  );
+  );*/
+
+  //db.collection("usuarios").document("003").delete();
+
+  /*DocumentSnapshot snapshot = await db.collection("usuarios").document("001").get();
+  print("dados: " + snapshot.data.toString());*/
+
+  /*QuerySnapshot querySnapshot = await db.collection("usuarios").getDocuments();
+  querySnapshot.documents.forEach((element) => print("Dados usuarios " + element.data.toString()));*/
+
+  db.collection("usuarios").snapshots().listen((snapshot) {
+    snapshot.documents.forEach((element) => print("Dados usuarios " + element.data.toString()));
+  });
+
 
   runApp(MaterialApp(
     home: Home(),
