@@ -38,10 +38,18 @@ void main() async {
   db.collection("usuarios").snapshots().listen((snapshot) {
     snapshot.documents.forEach((element) => print("Dados usuarios " + element.data.toString()));
   });*/
-  QuerySnapshot querySnapshot = await db.collection("usuarios")
+  /*QuerySnapshot querySnapshot = await db.collection("usuarios")
       //.where("nome", isEqualTo: "Antonio")
       //.where("idade", isEqualTo: "65")
       .where("idade", isLessThan: "66")
+      .getDocuments();
+  querySnapshot.documents.forEach((element) => print("Filtro nome: ${element.data["nome"]} idade: ${element.data["idade"]}"));
+  */
+  QuerySnapshot querySnapshot = await db.collection("usuarios")
+      //.where("nome", isEqualTo: "Antonio")
+      //.where("idade", isEqualTo: "65")
+      .where("nome", isGreaterThanOrEqualTo: "C")
+      .where("nome", isLessThanOrEqualTo: "C" + "\uf8ff")
       .getDocuments();
   querySnapshot.documents.forEach((element) => print("Filtro nome: ${element.data["nome"]} idade: ${element.data["idade"]}"));
 
