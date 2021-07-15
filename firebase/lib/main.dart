@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firestore db = Firestore.instance;
+  //Firestore db = Firestore.instance;
   /*
   db.collection("usuarios").document("002").setData(
       {
@@ -45,14 +46,25 @@ void main() async {
       .getDocuments();
   querySnapshot.documents.forEach((element) => print("Filtro nome: ${element.data["nome"]} idade: ${element.data["idade"]}"));
   */
-  QuerySnapshot querySnapshot = await db.collection("usuarios")
+  /*QuerySnapshot querySnapshot = await db.collection("usuarios")
       //.where("nome", isEqualTo: "Antonio")
       //.where("idade", isEqualTo: "65")
       .where("nome", isGreaterThanOrEqualTo: "C")
       .where("nome", isLessThanOrEqualTo: "C" + "\uf8ff")
       .getDocuments();
   querySnapshot.documents.forEach((element) => print("Filtro nome: ${element.data["nome"]} idade: ${element.data["idade"]}"));
-
+*/
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String email = "teste@gmail.com";
+  String senha = "123456";
+  auth.createUserWithEmailAndPassword(email: email, password: senha).then(
+          (firebaseUser) {
+            print("Sucesso ao cadastrar");
+          }).catchError((error) => print("Erro: " + error.toString()));
+  FirebaseUser usuarioAtual = await auth.currentUser();
+  if(usuarioAtual != null){
+    print("Usuario logado");
+  }
   runApp(MaterialApp(
     home: Home(),
     debugShowCheckedModeBanner: false,
