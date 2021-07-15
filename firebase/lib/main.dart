@@ -61,6 +61,8 @@ void main() async {
           (firebaseUser) {
             print("Sucesso ao cadastrar");
           }).catchError((error) => print("Erro: " + error.toString()));
+  auth.signOut(); // Para deslogar o usuario
+  auth.signInWithEmailAndPassword(email: email, password: senha); // Fazer login com o usuario
   FirebaseUser usuarioAtual = await auth.currentUser();
   if(usuarioAtual != null){
     print("Usuario logado");
