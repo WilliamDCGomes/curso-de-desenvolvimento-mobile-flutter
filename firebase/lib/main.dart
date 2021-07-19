@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 void main() async {
@@ -54,7 +57,7 @@ void main() async {
       .getDocuments();
   querySnapshot.documents.forEach((element) => print("Filtro nome: ${element.data["nome"]} idade: ${element.data["idade"]}"));
 */
-  FirebaseAuth auth = FirebaseAuth.instance;
+  /*FirebaseAuth auth = FirebaseAuth.instance;
   String email = "teste@gmail.com";
   String senha = "123456";
   auth.createUserWithEmailAndPassword(email: email, password: senha).then(
@@ -66,18 +69,59 @@ void main() async {
   FirebaseUser usuarioAtual = await auth.currentUser();
   if(usuarioAtual != null){
     print("Usuario logado");
-  }
+  }*/
   runApp(MaterialApp(
     home: Home(),
     debugShowCheckedModeBanner: false,
   ));
 }
-
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
 
   @override
+  _HomeState createState() => _HomeState();
+}
+
+
+class _HomeState extends State<Home> {
+  File _image;
+  Future _recuperarImagem(bool fromCamera) async {
+    File imagemSelecionada;
+    if(fromCamera){
+      imagemSelecionada = await ImagePicker.pickImage(source: ImageSource.camera);
+    }
+    else{
+      imagemSelecionada = await ImagePicker.pickImage(source: ImageSource.gallery);
+    }
+    setState(() {
+      _image = imagemSelecionada;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Selecionar imagem"),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            RaisedButton(
+                child: Text("Camera"),
+                onPressed: (){
+                  _recuperarImagem(true);
+                }
+            ),
+            RaisedButton(
+                child: Text("Galeria"),
+                onPressed: (){
+                  _recuperarImagem(false);
+                }
+            ),
+            _image == null ? Container() : Image.file(_image)
+          ],
+        ),
+      ),
+    );
   }
 }
 
