@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -96,6 +97,12 @@ class _HomeState extends State<Home> {
       _image = imagemSelecionada;
     });
   }
+  Future _uploadImages() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    StorageReference pastaRaiz = storage.ref();
+    StorageReference arquivo = pastaRaiz.child("foto1.jpg");
+    arquivo.putFile(_image);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +124,13 @@ class _HomeState extends State<Home> {
                   _recuperarImagem(false);
                 }
             ),
-            _image == null ? Container() : Image.file(_image)
+            _image == null ? Container() : Image.file(_image),
+            RaisedButton(
+                child: Text("Upload Storage"),
+                onPressed: (){
+                  _uploadImages();
+                }
+            ),
           ],
         ),
       ),
