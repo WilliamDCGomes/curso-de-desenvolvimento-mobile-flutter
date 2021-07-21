@@ -101,7 +101,20 @@ class _HomeState extends State<Home> {
     FirebaseStorage storage = FirebaseStorage.instance;
     StorageReference pastaRaiz = storage.ref();
     StorageReference arquivo = pastaRaiz.child("foto1.jpg");
-    arquivo.putFile(_image);
+    StorageUploadTask task = arquivo.putFile(_image);
+    task.events.listen((event) {
+      if(event.type == StorageTaskEventType.progress){
+
+      }
+      else if(event.type == StorageTaskEventType.success){
+
+      }
+    });
+    String urlDaImagem;
+    task.onComplete.then((value) async {
+      urlDaImagem = await value.ref.getDownloadURL().toString();
+    }
+    );
   }
   @override
   Widget build(BuildContext context) {
