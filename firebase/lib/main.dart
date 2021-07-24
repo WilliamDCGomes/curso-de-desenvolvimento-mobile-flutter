@@ -1,21 +1,20 @@
 import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   //Firestore db = Firestore.instance;
-  /*
-  db.collection("usuarios").document("002").setData(
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  db.collection("usuarios").doc("002").set(
       {
         "nome": "Ana Maria",
         "idade": "20"
       }
   );
-  *//*
   DocumentReference ref = await db.collection("noticias").add(
     {
       "titulo": "Novo planeta é descoberto",
@@ -23,8 +22,8 @@ void main() async {
     }
   );
 
-  print("id salvo " + ref.documentID);
-  *//*
+  print("id salvo " + ref.id);
+  /*
   db.collection("noticias").document("xaoeZxJhS4HTAWjnRpFZ").setData(
       {
         "titulo": "Novo planeta é descoberto Alterado",
@@ -32,17 +31,17 @@ void main() async {
       }
   );*/
 
-  //db.collection("usuarios").document("003").delete();
+  db.collection("usuarios").doc("003").delete();
 
-  /*DocumentSnapshot snapshot = await db.collection("usuarios").document("001").get();
-  print("dados: " + snapshot.data.toString());*/
+  DocumentSnapshot snapshot = await db.collection("usuarios").doc("001").get();
+  print("dados: " + snapshot.data().toString());
 
-  /*QuerySnapshot querySnapshot = await db.collection("usuarios").getDocuments();
-  querySnapshot.documents.forEach((element) => print("Dados usuarios " + element.data.toString()));*/
-  /*
+  QuerySnapshot querySnapshot = await db.collection("usuarios").get();
+  querySnapshot.docs.forEach((element) => print("Dados usuarios " + element.data().toString()));
+
   db.collection("usuarios").snapshots().listen((snapshot) {
-    snapshot.documents.forEach((element) => print("Dados usuarios " + element.data.toString()));
-  });*/
+    snapshot.docs.forEach((element) => print("Dados usuarios " + element.data().toString()));
+  });
   /*QuerySnapshot querySnapshot = await db.collection("usuarios")
       //.where("nome", isEqualTo: "Antonio")
       //.where("idade", isEqualTo: "65")
