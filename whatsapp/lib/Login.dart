@@ -28,13 +28,13 @@ class _LoginState extends State<Login> {
                 decoration: InputDecoration(
                   hintText: "E-mail",
                   hintStyle: TextStyle(
-                    fontSize: 2.h,
+                    fontSize: 12,
                   ),
                   border: OutlineInputBorder(),
                 ),
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 2.h,
+                  fontSize: 12,
                 ),
               ),
               TextFormField(
@@ -43,13 +43,13 @@ class _LoginState extends State<Login> {
                 decoration: InputDecoration(
                   hintText: "Senha",
                   hintStyle: TextStyle(
-                    fontSize: 2.h,
+                    fontSize: 12,
                   ),
                   border: OutlineInputBorder(),
                 ),
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 2.h,
+                  fontSize: 12,
                 ),
               ),
               RaisedButton(
