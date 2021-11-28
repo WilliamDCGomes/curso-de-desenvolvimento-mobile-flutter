@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Login extends StatefulWidget {
 
@@ -8,76 +9,120 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   var controllerLogin = TextEditingController();
+  var controllerPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0XFF2B2B2B),
       body: Container(
-        padding: EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Image.asset("images/logo.png"),
-              ),
-              TextFormField(
-                controller: controllerLogin,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: "E-mail",
-                  hintStyle: TextStyle(
-                    fontSize: 2.h,
+        padding: EdgeInsets.all(6.w),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(bottom: 15.h),
+                  child: Image.asset(
+                    "images/logo.png",
+                    height: 20.h,
                   ),
-                  border: OutlineInputBorder(),
                 ),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 2.h,
-                ),
-              ),
-              TextFormField(
-                controller: controllerLogin,
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  hintText: "Senha",
-                  hintStyle: TextStyle(
-                    fontSize: 2.h,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 2.h),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(1.h),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: TextField(
+                        controller: controllerLogin,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                          hintText: "E-mail",
+                          hintStyle: TextStyle(
+                            fontSize: 2.h,
+                            color: Colors.white,
+                          ),
+                          enabledBorder: InputBorder.none
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 2.h,
+                        ),
+                      ),
+                    ),
                   ),
-                  border: OutlineInputBorder(),
                 ),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 2.h,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10.h),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(1.h),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: TextField(
+                        controller: controllerPassword,
+                        textAlignVertical: TextAlignVertical.center,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            hintText: "Senha",
+                            hintStyle: TextStyle(
+                              fontSize: 2.h,
+                              color: Colors.white,
+                            ),
+                            enabledBorder: InputBorder.none
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 2.h,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              RaisedButton(
-                onPressed: (){
+                Padding(
+                  padding: EdgeInsets.only(bottom: 2.h),
+                  child: SizedBox(
+                    height: 5.h,
+                    child: RaisedButton(
+                      onPressed: (){
 
-                },
-                color: Colors.green,
-                child: Text(
-                  "Entrar",
+                      },
+                      color: Colors.green,
+                      child: Text(
+                        "Entrar",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(1.h),
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  "Não tem conta? cadastre-se!",
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 15.sp,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              Text(
-                "Não tem conta? cadastre-se!",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-//Corrigindo conta commit
