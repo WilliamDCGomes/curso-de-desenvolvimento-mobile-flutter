@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class Login extends StatefulWidget {
+class Cadastro extends StatefulWidget {
+  const Cadastro({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  _CadastroState createState() => _CadastroState();
 }
 
-class _LoginState extends State<Login> {
-  var controllerLogin = TextEditingController();
-  var controllerPassword = TextEditingController();
+class _CadastroState extends State<Cadastro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XFF2B2B2B),
+      appBar: AppBar(
+        title: Text(
+          "Cadastro",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: Container(
         padding: EdgeInsets.all(6.w),
         child: Center(
@@ -24,9 +30,8 @@ class _LoginState extends State<Login> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(bottom: 15.h),
-                  child: Image.asset(
-                    "images/logo.png",
-                    height: 20.h,
+                  child: Icon(
+                      icon: Icons.user
                   ),
                 ),
                 Container(
@@ -41,12 +46,12 @@ class _LoginState extends State<Login> {
                       controller: controllerLogin,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
-                        hintText: "E-mail",
-                        hintStyle: TextStyle(
-                          fontSize: 2.h,
-                          color: Colors.white,
-                        ),
-                        enabledBorder: InputBorder.none
+                          hintText: "E-mail",
+                          hintStyle: TextStyle(
+                            fontSize: 2.h,
+                            color: Colors.white,
+                          ),
+                          enabledBorder: InputBorder.none
                       ),
                       style: TextStyle(
                         color: Colors.white,
