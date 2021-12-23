@@ -1,15 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'Home.dart';
 import 'Login.dart';
 
 void main() {
   runApp(
     ResponsiveSizer(builder: (context, orientation, screentype) {
-      return MaterialApp(
-        home: Login(),
+      return GetMaterialApp(
+        themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        getPages: [
+          GetPage(name: "/initialPage", page: () => Login()),
+        ],
+        initialRoute: "/initialPage",
       );
     }),
   );

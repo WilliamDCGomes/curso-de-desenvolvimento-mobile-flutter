@@ -9,10 +9,15 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+  var controllerName = TextEditingController();
+  var controllerEmail = TextEditingController();
+  var controllerPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0XFF2B2B2B),
       appBar: AppBar(
+        backgroundColor: Color(0XFF096A63),
         title: Text(
           "Cadastro",
           style: TextStyle(
@@ -28,7 +33,123 @@ class _CadastroState extends State<Cadastro> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                Icon(
+                  Icons.person_add,
+                  color: Colors.white,
+                  size: 20.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 2.h),
+                  child: Container(
+                    height: 5.h,
+                    padding: EdgeInsets.only(top: 0.5.h),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(1.h),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+                      child: TextField(
+                        controller: controllerName,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                            hintText: "Nome",
+                            hintStyle: TextStyle(
+                              fontSize: 2.h,
+                              color: Colors.white,
+                            ),
+                            enabledBorder: InputBorder.none
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 2.h,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 2.h),
+                  child: Container(
+                    height: 5.h,
+                    padding: EdgeInsets.only(top: 0.5.h),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(1.h),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+                      child: TextField(
+                        controller: controllerEmail,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                            hintText: "E-mail",
+                            hintStyle: TextStyle(
+                              fontSize: 2.h,
+                              color: Colors.white,
+                            ),
+                            enabledBorder: InputBorder.none
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 2.h,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 2.h),
+                  child: Container(
+                    height: 5.h,
+                    padding: EdgeInsets.only(top: 0.5.h),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(1.h),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+                      child: TextField(
+                        controller: controllerPassword,
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                            hintText: "Senha",
+                            hintStyle: TextStyle(
+                              fontSize: 2.h,
+                              color: Colors.white,
+                            ),
+                            enabledBorder: InputBorder.none
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 2.h,
+                        ),
+                        obscureText: true,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5.h,
+                  child: RaisedButton(
+                    onPressed: (){
 
+                    },
+                    color: Colors.green,
+                    child: Text(
+                      "Cadastrar",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1.h),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
