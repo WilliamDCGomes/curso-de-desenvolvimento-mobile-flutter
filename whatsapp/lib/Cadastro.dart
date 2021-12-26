@@ -1,5 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:whatsapp/Home.dart';
+
+import 'models/Usuario.dart';
 
 class Cadastro extends StatefulWidget {
   const Cadastro({Key? key}) : super(key: key);
@@ -12,6 +18,7 @@ class _CadastroState extends State<Cadastro> {
   var controllerName = TextEditingController();
   var controllerEmail = TextEditingController();
   var controllerPassword = TextEditingController();
+  Color corMensagemErro = Colors.red;
   String mensagemErro = '';
 
   validarCampos(){
@@ -21,17 +28,36 @@ class _CadastroState extends State<Cadastro> {
       setState(() {
         mensagemErro = "";
       });
-      cadastrarUsuario();
+      Usuario user = Usuario();
+      user.nome = controllerName.text;
+      user.email = controllerEmail.text;
+      user.senha = controllerPassword.text;
+
+      cadastrarUsuario(user);
     }
     else{
       setState(() {
+        corMensagemErro = Colors.red;
         mensagemErro = "Preencha todos os campos";
       });
     }
   }
 
-  cadastrarUsuario(){
-
+  cadastrarUsuario(Usuario user) async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.createUserWithEmailAndPassword(
+      email: user.email,
+      password: user.senha,
+    ).then((value){
+      print("Sucesso ao cadastrar");
+      Get.offAll(Home());
+    }).catchError((error){
+      setState(() {
+        corMensagemErro = Colors.red;
+        mensagemErro = "Erro ao realizar o cadastro: \n" + error;
+      });
+    });
   }
 
   @override
@@ -178,7 +204,7 @@ class _CadastroState extends State<Cadastro> {
                 Text(
                   mensagemErro,
                   style: TextStyle(
-                    color: Colors.red,
+                    color: corMensagemErro,
                     fontSize: 20,
                   ),
                   textAlign: TextAlign.center,
