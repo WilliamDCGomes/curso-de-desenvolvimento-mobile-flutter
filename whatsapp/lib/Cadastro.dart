@@ -12,6 +12,28 @@ class _CadastroState extends State<Cadastro> {
   var controllerName = TextEditingController();
   var controllerEmail = TextEditingController();
   var controllerPassword = TextEditingController();
+  String mensagemErro = '';
+
+  validarCampos(){
+    if(controllerName.text.trim().isNotEmpty &&
+        controllerEmail.text.trim().isNotEmpty &&
+        controllerPassword.text.trim().isNotEmpty){
+      setState(() {
+        mensagemErro = "";
+      });
+      cadastrarUsuario();
+    }
+    else{
+      setState(() {
+        mensagemErro = "Preencha todos os campos";
+      });
+    }
+  }
+
+  cadastrarUsuario(){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,26 +151,37 @@ class _CadastroState extends State<Cadastro> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 5.h,
-                  child: RaisedButton(
-                    onPressed: (){
-
-                    },
-                    color: Colors.green,
-                    child: Text(
-                      "Cadastrar",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.bold,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 5.h),
+                  child: SizedBox(
+                    height: 5.h,
+                    child: RaisedButton(
+                      onPressed: (){
+                        validarCampos();
+                      },
+                      color: Colors.green,
+                      child: Text(
+                        "Cadastrar",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(1.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(1.h),
+                      ),
                     ),
                   ),
+                ),
+                Text(
+                  mensagemErro,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
