@@ -55,6 +55,7 @@ class _LoginState extends State<Login> {
   Future verificaUsuarioLogado() async {
     await Firebase.initializeApp();
     FirebaseAuth auth = FirebaseAuth.instance;
+    //auth.signOut();
     User? usuarioLogado = await auth.currentUser;
     if(usuarioLogado != null)
       Get.offAll(Home());

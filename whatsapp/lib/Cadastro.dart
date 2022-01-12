@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,6 +52,8 @@ class _CadastroState extends State<Cadastro> {
       password: user.senha,
     ).then((value){
       print("Sucesso ao cadastrar");
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      db.collection("usuarios").doc(value.user!.uid).set(user.toMap());
       Get.offAll(Home());
     }).catchError((error){
       setState(() {

@@ -26,4 +26,11 @@ class Usuario {
   set nome(String value) {
     _nome = value;
   }
+
+  Map<String, dynamic> toMap(){
+    return {
+      "nome": this._nome,
+      "email": this._email,
+    };
+  }
 }
