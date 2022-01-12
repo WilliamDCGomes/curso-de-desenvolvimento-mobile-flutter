@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'Cadastro.dart';
+import 'Home.dart';
+import 'models/Usuario.dart';
 
 class Login extends StatefulWidget {
 
@@ -12,6 +16,56 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   var controllerLogin = TextEditingController();
   var controllerPassword = TextEditingController();
+  String mensagemErro = '';
+
+  validarCampos(){
+    if(controllerLogin.text.trim().isNotEmpty &&
+        controllerPassword.text.trim().isNotEmpty){
+      setState(() {
+        mensagemErro = "";
+      });
+      Usuario user = Usuario();
+      user.email = controllerLogin.text;
+      user.senha = controllerPassword.text;
+
+      _logarUsuario(user);
+    }
+    else{
+      setState(() {
+        mensagemErro = "Preencha todos os campos";
+      });
+    }
+  }
+
+  _logarUsuario(Usuario user) async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.signInWithEmailAndPassword(
+      email: user.email,
+      password: user.senha,
+    ).then((value){
+      Get.offAll(Home());
+    }).catchError((error){
+      setState(() {
+        mensagemErro = "Erro ao autenticar o usuário, verifique e-mail e senha, e tente novamente";
+      });
+    });
+  }
+
+  Future verificaUsuarioLogado() async {
+    await Firebase.initializeApp();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? usuarioLogado = await auth.currentUser;
+    if(usuarioLogado != null)
+      Get.offAll(Home());
+  }
+
+  @override
+  void initState() {
+    verificaUsuarioLogado();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +152,7 @@ class _LoginState extends State<Login> {
                     height: 5.h,
                     child: RaisedButton(
                       onPressed: (){
-
+                        validarCampos();
                       },
                       color: Colors.green,
                       child: Text(
@@ -128,6 +182,14 @@ class _LoginState extends State<Login> {
                     ),
                     textAlign: TextAlign.center,
                   ),
+                ),
+                Text(
+                  mensagemErro,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
