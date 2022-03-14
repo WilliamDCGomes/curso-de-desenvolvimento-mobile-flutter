@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:whatsapp/Home.dart';
-
 import 'models/Usuario.dart';
 
 class Cadastro extends StatefulWidget {
