@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -13,21 +15,65 @@ class Configuracoes extends StatefulWidget {
 class _ConfiguracoesState extends State<Configuracoes> {
   TextEditingController _nomeController = TextEditingController();
   bool temFoto = true;
-  PickedFile? _imagem;
+  bool subindoImagem = false;
+  String _idUsuarioLogado = "";
+  XFile? _imagem;
+  String _urlImagemRecuperada = "";
 
   Future _recuperarImagem(String origemImagem) async {
-    PickedFile? imagemSelecionada;
+    XFile? imagemSelecionada;
+    ImagePicker _picker = ImagePicker();
     switch(origemImagem){
       case "camera":
-        imagemSelecionada = await ImagePicker.platform.pickImage(source: ImageSource.camera);
+        imagemSelecionada = await _picker.pickImage(source: ImageSource.camera);
         break;
       case "galeria":
-        imagemSelecionada = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+        imagemSelecionada = await _picker.pickImage(source: ImageSource.gallery);
         break;
     }
     if(imagemSelecionada != null){
-      _imagem = imagemSelecionada;
+      setState(() {
+        _imagem = imagemSelecionada;
+        setState(() {
+          subindoImagem = true;
+        });
+        _uploadImagem();
+      });
     }
+  }
+
+  Future _uploadImagem() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference pastaRaiz = storage.ref();
+    Reference arquivo = pastaRaiz
+        .child("perfil")
+        .child("imagem_perfil_" + _idUsuarioLogado + ".jpg");
+    File imagem = File(_imagem!.path);
+    UploadTask task = arquivo.putFile(imagem);
+    await Future.delayed(Duration(seconds: 5));
+    _recuperarUrlImagem(task.snapshot);
+  }
+
+  _recuperarUrlImagem(TaskSnapshot snapshot) async {
+    String image = await snapshot.ref.getDownloadURL();
+    setState(() {
+      _urlImagemRecuperada = image;
+      subindoImagem = false;
+    });
+  }
+
+  _recuperaDadosUsuario() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? usuarioLogado = await auth.currentUser;
+    if(usuarioLogado != null){
+      _idUsuarioLogado = usuarioLogado.uid;
+    }
+  }
+
+  @override
+  void initState() {
+    _recuperaDadosUsuario();
+    super.initState();
   }
 
   @override
@@ -57,23 +103,26 @@ class _ConfiguracoesState extends State<Configuracoes> {
                   borderRadius: BorderRadius.circular(12.5.h),
                   color: Color(0XFFF0F0F0),
                 ),
-                child: temFoto ?
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12.5.h),
-                  child: Image.network(
-                    "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil0.jpg?alt=media&token=0032bd01-1492-441f-bf73-599744882771",
-                  ),
-                ) :
-                Center(
-                  child: Text(
-                    "Sem Foto",
-                    style: TextStyle(
-                      color: Color(0XFF2B2B2B),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22.sp,
+                child: subindoImagem ?
+                CircularProgressIndicator() : (
+                  temFoto && _urlImagemRecuperada != "" ?
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12.5.h),
+                    child: Image.network(
+                      _urlImagemRecuperada,
                     ),
-                    textAlign: TextAlign.start,
-                  ),
+                  ) :
+                  Center(
+                    child: Text(
+                      "Sem Foto",
+                      style: TextStyle(
+                        color: Color(0XFF2B2B2B),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.sp,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  )
                 ),
               ),
               Padding(
