@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Configuracoes extends StatefulWidget {
@@ -9,7 +11,24 @@ class Configuracoes extends StatefulWidget {
 }
 
 class _ConfiguracoesState extends State<Configuracoes> {
-  bool temFoto = false;
+  TextEditingController _nomeController = TextEditingController();
+  bool temFoto = true;
+  PickedFile? _imagem;
+
+  Future _recuperarImagem(String origemImagem) async {
+    PickedFile? imagemSelecionada;
+    switch(origemImagem){
+      case "camera":
+        imagemSelecionada = await ImagePicker.platform.pickImage(source: ImageSource.camera);
+        break;
+      case "galeria":
+        imagemSelecionada = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+        break;
+    }
+    if(imagemSelecionada != null){
+      _imagem = imagemSelecionada;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +61,7 @@ class _ConfiguracoesState extends State<Configuracoes> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12.5.h),
                   child: Image.network(
-                    "",
+                    "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil0.jpg?alt=media&token=0032bd01-1492-441f-bf73-599744882771",
                   ),
                 ) :
                 Center(
@@ -63,9 +82,7 @@ class _ConfiguracoesState extends State<Configuracoes> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: (){
-
-                      },
+                      onTap: () => _recuperarImagem("camera"),
                       child: Text(
                         "Câmera",
                         style: TextStyle(
@@ -78,9 +95,7 @@ class _ConfiguracoesState extends State<Configuracoes> {
                       width: 8.w,
                     ),
                     GestureDetector(
-                      onTap: (){
-
-                      },
+                      onTap: () => _recuperarImagem("galeria"),
                       child: Text(
                         "Galeria",
                         style: TextStyle(
@@ -105,6 +120,7 @@ class _ConfiguracoesState extends State<Configuracoes> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 2.w),
                     child: TextField(
+                      controller: _nomeController,
                       textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
                           hintText: "Digite o nome",

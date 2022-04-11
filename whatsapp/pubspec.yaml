@@ -34,6 +34,7 @@ dependencies:
   cloud_firestore: ^3.1.6
   get: ^4.3.8
   responsive_sizer: 3.0.4+4
+  image_picker: ^0.8.5
 
 dev_dependencies:
   flutter_test:
