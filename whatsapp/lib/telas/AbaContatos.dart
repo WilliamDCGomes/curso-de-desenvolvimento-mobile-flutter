@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../models/Conversa.dart';
+import '../models/Usuario.dart';
 
 class AbaContatos extends StatefulWidget {
   const AbaContatos({Key? key}) : super(key: key);
@@ -10,115 +12,129 @@ class AbaContatos extends StatefulWidget {
 }
 
 class _AbaContatosState extends State<AbaContatos> {
-  List<Conversa> listaConversa = [
-    Conversa(
-        "William Douglas",
-        "Recriando o Whatsapp com Flutter e Firebase",
-        "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil0.jpg?alt=media&token=0032bd01-1492-441f-bf73-599744882771"
-    ),
-    Conversa(
-        "Jamilton Damasceno",
-        "Olá, tudo bem?",
-        "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil5.jpg?alt=media&token=05f2a431-d10c-471d-8ca1-cc57437de2ea"
-    ),
-    Conversa(
-        "Marcela Silva",
-        "Vou jogar basket, vlw",
-        "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil1.jpg?alt=media&token=2aa1f8db-8435-46eb-823f-a4f8bf94c7b9"
-    ),
-    Conversa(
-        "Lucas Ferreira",
-        "Me ajuda a tirar aquela música",
-        "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil2.jpg?alt=media&token=f45e7ac0-4c34-4b7a-8ba9-273d229ac71d"
-    ),
-    Conversa(
-        "Carla Carneiro",
-        "Me indica uma série?",
-        "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil3.jpg?alt=media&token=38e5cca4-ef88-449d-b7be-36d31431c5d3"
-    ),
-    Conversa(
-        "Renan Sabino",
-        "Estou fazendo montagens com vídeos!!",
-        "https://firebasestorage.googleapis.com/v0/b/whatsapp-32bef.appspot.com/o/perfil%2Fperfil4.jpg?alt=media&token=abcbfedd-86de-49ea-9eb5-04c915f4d877"
-    ),
-    Conversa(
-        "André Ribeiro",
-        "Estou sem foto de perfil!",
-        ""
-    ),
-  ];
+  late String _idUsuarioLogado;
+  late String _emailUsuarioLogado;
 
   @override
   void initState() {
-    listaConversa.sort((a, b) => a.nome.compareTo(b.nome));
     super.initState();
+    _recuperaDadosUsuario();
+  }
+
+  Future<List<Usuario>> _recuperarContatos() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    var querySnapshot = await db.collection("usuarios").get();
+
+    List<Usuario> listaUsuarios = <Usuario>[];
+    for(var item in querySnapshot.docs){
+      var dados = item.data();
+      if(dados["email"] != _emailUsuarioLogado){
+        Usuario usuario = Usuario();
+        usuario.email = dados["email"];
+        usuario.nome = dados["nome"];
+        usuario.urlImagem = dados["urlImagem"];
+        listaUsuarios.add(usuario);
+      }
+    }
+    return listaUsuarios;
+  }
+
+  _recuperaDadosUsuario() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? usuarioLogado = await auth.currentUser;
+    if(usuarioLogado != null){
+      _idUsuarioLogado = usuarioLogado.uid;
+      _emailUsuarioLogado = usuarioLogado.email!;
+
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: listaConversa.length,
-      itemBuilder: (context, index){
-        var siglaNome = listaConversa[index].nome.split(' ');
-        return Padding(
-          padding: EdgeInsets.all(1.h),
-          child: SizedBox(
-            height: 12.h,
-            child: Card(
-              elevation: 3,
-              shape:  RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.h),
+    return FutureBuilder<List<Usuario>>(
+      future: _recuperarContatos(),
+      builder: (context, snapshot){
+        switch(snapshot.connectionState){
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Center(
+              child: Column(
+                children: [
+                  Text("Carregando contatos"),
+                  CircularProgressIndicator(),
+                ],
               ),
-              color: Color(0XFF096A63),
-              child: Padding(
-                padding: EdgeInsets.all(.5.h),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 5.w),
-                      child: Container(
-                        height: 8.h,
-                        width: 8.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4.h),
-                          color: Color(0XFF2B2B2B),
-                        ),
-                        child: listaConversa[index].caminhoFoto.isNotEmpty ?
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(4.h),
-                          child: Image.network(
-                            listaConversa[index].caminhoFoto,
-                          ),
-                        ) :
-                        Center(
-                          child: Text(
-                            siglaNome[0].substring(0, 1) + siglaNome[1].substring(0, 1),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22.sp,
+            );
+          case ConnectionState.active:
+          case ConnectionState.done:
+            return ListView.builder(
+              itemCount: snapshot.data?.length,
+              itemBuilder: (context, index){
+                Usuario usuario = snapshot.data![index];
+                var siglaNome = usuario.nome.split(' ');
+                return Padding(
+                  padding: EdgeInsets.all(1.h),
+                  child: SizedBox(
+                    height: 12.h,
+                    child: Card(
+                      elevation: 3,
+                      shape:  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(2.h),
+                      ),
+                      color: Color(0XFF096A63),
+                      child: Padding(
+                        padding: EdgeInsets.all(.5.h),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 5.w),
+                              child: Container(
+                                height: 8.h,
+                                width: 8.h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4.h),
+                                  color: Color(0XFF2B2B2B),
+                                ),
+                                child: usuario.urlImagem.isNotEmpty ?
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(4.h),
+                                  child: Image.network(
+                                    usuario.urlImagem,
+                                  ),
+                                ) :
+                                Center(
+                                  child: Text(
+                                    siglaNome[0].substring(0, 1) + siglaNome[1].substring(0, 1),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22.sp,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              ),
                             ),
-                            textAlign: TextAlign.start,
-                          ),
+                            Text(
+                              usuario.nome,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.sp,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Text(
-                      listaConversa[index].nome,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.sp,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+                  ),
+                );
+              },
+            );
+        }
+      }
     );
   }
 }

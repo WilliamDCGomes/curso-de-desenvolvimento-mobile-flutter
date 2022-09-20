@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'chat_message.dart';
@@ -48,11 +49,14 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage({String text, File imgFile}) async {
     final FirebaseUser user = await _getUser();
     if(user == null){
-      _scaffoldKey.currentState.showSnackBar(
-          SnackBar(
-            content: Text('Não foi possível fazer o login. Tente novamente!'),
-            backgroundColor: Colors.red,
-          )
+      Get.snackbar(
+        'Aviso!',
+        '',
+        messageText: Text('Não foi possível fazer o login. Tente novamente!', style: const TextStyle(fontWeight: FontWeight.bold)),
+        duration: const Duration(seconds: 1),
+        overlayColor: const Color(0xffb74093),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
       );
     }
     Map<String, dynamic> data = {
@@ -95,10 +99,14 @@ class _ChatScreenState extends State<ChatScreen> {
               onPressed: (){
                 FirebaseAuth.instance.signOut();
                 googleSignIn.signOut();
-                _scaffoldKey.currentState.showSnackBar(
-                  SnackBar(
-                      content: Text('LogOut realizado com sucesso!'),
-                  )
+                Get.snackbar(
+                  'Aviso!',
+                  '',
+                  messageText: Text('LogOut realizado com sucesso!', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  duration: const Duration(seconds: 1),
+                  overlayColor: const Color(0xffb74093),
+                  snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: Colors.red,
                 );
               }
           ) : Container(),

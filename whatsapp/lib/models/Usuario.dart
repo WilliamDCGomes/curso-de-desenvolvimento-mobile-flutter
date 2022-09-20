@@ -2,11 +2,13 @@ class Usuario {
   late String _nome;
   late String _email;
   late String _senha;
+  late String _urlImagem;
 
   Usuario(){
     _nome = "";
     _email = "";
     _senha = "";
+    _urlImagem = "";
   }
 
   String get senha => _senha;
@@ -27,10 +29,17 @@ class Usuario {
     _nome = value;
   }
 
+  String get urlImagem => _urlImagem;
+
+  set urlImagem(String value) {
+    _urlImagem = value;
+  }
+
   Map<String, dynamic> toMap(){
     return {
       "nome": this._nome,
       "email": this._email,
+      "urlImagem": this._urlImagem,
     };
   }
 }
