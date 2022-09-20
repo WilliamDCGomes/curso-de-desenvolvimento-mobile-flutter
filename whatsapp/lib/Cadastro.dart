@@ -183,11 +183,18 @@ class _CadastroState extends State<Cadastro> {
                   padding: EdgeInsets.only(bottom: 5.h),
                   child: SizedBox(
                     height: 5.h,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: (){
                         validarCampos();
                       },
-                      color: Colors.green,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.green),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(1.h),
+                          ),
+                        ),
+                      ),
                       child: Text(
                         "Cadastrar",
                         style: TextStyle(
@@ -196,9 +203,6 @@ class _CadastroState extends State<Cadastro> {
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(1.h),
                       ),
                     ),
                   ),

@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -14,11 +16,11 @@ class Configuracoes extends StatefulWidget {
 
 class _ConfiguracoesState extends State<Configuracoes> {
   TextEditingController _nomeController = TextEditingController();
-  bool temFoto = true;
+  RxBool temFoto = true.obs;
   bool subindoImagem = false;
   String _idUsuarioLogado = "";
   XFile? _imagem;
-  String _urlImagemRecuperada = "";
+  RxString _urlImagemRecuperada = "".obs;
 
   Future _recuperarImagem(String origemImagem) async {
     XFile? imagemSelecionada;
@@ -56,10 +58,31 @@ class _ConfiguracoesState extends State<Configuracoes> {
 
   _recuperarUrlImagem(TaskSnapshot snapshot) async {
     String image = await snapshot.ref.getDownloadURL();
+
+    _atualizarUrlImagemFirestore(image);
+
     setState(() {
-      _urlImagemRecuperada = image;
+      _urlImagemRecuperada.value = image;
       subindoImagem = false;
     });
+  }
+
+  _atualizarUrlImagemFirestore(String url) async {
+    Map<String, dynamic> dadosAtualizar = {
+      "urlImagem": url,
+    };
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("usuarios").doc(_idUsuarioLogado).update(dadosAtualizar);
+  }
+
+  _atualizarNomeFirestore() async {
+    Map<String, dynamic> dadosAtualizar = {
+      "nome": _nomeController.text,
+    };
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("usuarios").doc(_idUsuarioLogado).update(dadosAtualizar);
   }
 
   _recuperaDadosUsuario() async {
@@ -67,6 +90,20 @@ class _ConfiguracoesState extends State<Configuracoes> {
     User? usuarioLogado = await auth.currentUser;
     if(usuarioLogado != null){
       _idUsuarioLogado = usuarioLogado.uid;
+
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      var snapshot = await db.collection("usuarios").doc(_idUsuarioLogado).get();
+
+      Map<String, dynamic>? dados = snapshot.data();
+      if(dados != null){
+        _nomeController.text = dados["nome"];
+
+        if(dados["urlImagem"] != null){
+
+          _urlImagemRecuperada.value = dados["urlImagem"];
+          temFoto.value = true;
+        }
+      }
     }
   }
 
@@ -104,26 +141,26 @@ class _ConfiguracoesState extends State<Configuracoes> {
                   color: Color(0XFFF0F0F0),
                 ),
                 child: subindoImagem ?
-                CircularProgressIndicator() : (
-                  temFoto && _urlImagemRecuperada != "" ?
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.5.h),
-                    child: Image.network(
-                      _urlImagemRecuperada,
-                    ),
-                  ) :
-                  Center(
-                    child: Text(
-                      "Sem Foto",
-                      style: TextStyle(
-                        color: Color(0XFF2B2B2B),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.sp,
+                CircularProgressIndicator() : Obx(() => (
+                    temFoto.value && _urlImagemRecuperada.value != "" ?
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.5.h),
+                      child: Image.network(
+                        _urlImagemRecuperada.value,
                       ),
-                      textAlign: TextAlign.start,
-                    ),
-                  )
-                ),
+                    ) :
+                    Center(
+                      child: Text(
+                        "Sem Foto",
+                        style: TextStyle(
+                          color: Color(0XFF2B2B2B),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22.sp,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                    )
+                ),),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 2.h),
@@ -192,11 +229,16 @@ class _ConfiguracoesState extends State<Configuracoes> {
                 child: SizedBox(
                   height: 5.h,
                   width: 35.w,
-                  child: RaisedButton(
-                    onPressed: (){
-
-                    },
-                    color: Colors.green,
+                  child: ElevatedButton(
+                    onPressed: () => _atualizarNomeFirestore(),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.5.h),
+                        ),
+                      ),
+                    ),
                     child: Text(
                       "Salvar",
                       style: TextStyle(
@@ -205,9 +247,6 @@ class _ConfiguracoesState extends State<Configuracoes> {
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2.5.h),
                     ),
                   ),
                 ),

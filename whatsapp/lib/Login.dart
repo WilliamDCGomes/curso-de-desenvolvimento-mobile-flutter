@@ -151,11 +151,18 @@ class _LoginState extends State<Login> {
                   padding: EdgeInsets.only(bottom: 2.h),
                   child: SizedBox(
                     height: 5.h,
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       onPressed: (){
                         validarCampos();
                       },
-                      color: Colors.green,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.green),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(1.h),
+                          ),
+                        ),
+                      ),
                       child: Text(
                         "Entrar",
                         style: TextStyle(
@@ -164,9 +171,6 @@ class _LoginState extends State<Login> {
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(1.h),
                       ),
                     ),
                   ),
