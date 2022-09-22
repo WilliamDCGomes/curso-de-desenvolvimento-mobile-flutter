@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:whatsapp/Mensagens.dart';
 import '../models/Usuario.dart';
 
 class AbaContatos extends StatefulWidget {
@@ -75,57 +77,62 @@ class _AbaContatosState extends State<AbaContatos> {
                 var siglaNome = usuario.nome.split(' ');
                 return Padding(
                   padding: EdgeInsets.all(1.h),
-                  child: SizedBox(
-                    height: 12.h,
-                    child: Card(
-                      elevation: 3,
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(2.h),
-                      ),
-                      color: Color(0XFF096A63),
-                      child: Padding(
-                        padding: EdgeInsets.all(.5.h),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 5.w),
-                              child: Container(
-                                height: 8.h,
-                                width: 8.h,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4.h),
-                                  color: Color(0XFF2B2B2B),
-                                ),
-                                child: usuario.urlImagem.isNotEmpty ?
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(4.h),
-                                  child: Image.network(
-                                    usuario.urlImagem,
+                  child: InkWell(
+                    onTap: (){
+                      Get.to(() => Mensagens(contato: usuario));
+                    },
+                    child: SizedBox(
+                      height: 12.h,
+                      child: Card(
+                        elevation: 3,
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.h),
+                        ),
+                        color: Color(0XFF096A63),
+                        child: Padding(
+                          padding: EdgeInsets.all(.5.h),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 5.w),
+                                child: Container(
+                                  height: 8.h,
+                                  width: 8.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4.h),
+                                    color: Color(0XFF2B2B2B),
                                   ),
-                                ) :
-                                Center(
-                                  child: Text(
-                                    siglaNome[0].substring(0, 1) + siglaNome[1].substring(0, 1),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22.sp,
+                                  child: usuario.urlImagem.isNotEmpty ?
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(4.h),
+                                    child: Image.network(
+                                      usuario.urlImagem,
                                     ),
-                                    textAlign: TextAlign.start,
+                                  ) :
+                                  Center(
+                                    child: Text(
+                                      siglaNome[0].substring(0, 1) + siglaNome[1].substring(0, 1),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22.sp,
+                                      ),
+                                      textAlign: TextAlign.start,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Text(
-                              usuario.nome,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.sp,
+                              Text(
+                                usuario.nome,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.sp,
+                                ),
+                                textAlign: TextAlign.start,
                               ),
-                              textAlign: TextAlign.start,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
