@@ -14,6 +14,21 @@ class Mensagens extends StatefulWidget {
 }
 
 class _MensagensState extends State<Mensagens> {
+  List<String> listaMensagens = [
+    "Olá meu amigo, tudo bem?",
+    "Tudo ótimo!!! e contigo?",
+    "Estou muito bem!! queria ver uma coisa contigo, você vai na corrida",
+    "Não sei ainda :(",
+    "Pq se você fosse, queria ver se posso ir com você...",
+    "Posso te confirma no sábado? Vou ver isso",
+    "Opa! tranquilo",
+    "Excelente!!",
+    "Estou animado para essa corrida, não vejo a hora de chegar! ;)",
+    "Vai estar bem legal!! muita gente",
+    "Vai sim!",
+    "Lembra do carro que tinha te falado",
+    "Que legal!!",
+  ];
   TextEditingController _controllerMensagens = TextEditingController();
 
   _enviarMensagem(){
@@ -95,10 +110,36 @@ class _MensagensState extends State<Mensagens> {
       ),
     );
 
+    var listView = Expanded(
+      child: ListView.builder(
+        itemCount: listaMensagens.length,
+        itemBuilder: (context, index){
+          return Align(
+            alignment: index % 2 == 1 ? Alignment.centerRight : Alignment.centerLeft,
+            child: Container(
+              padding: EdgeInsets.all(2.h),
+              margin: EdgeInsets.symmetric(vertical: 1.h),
+              decoration: BoxDecoration(
+                color: index % 2 == 1 ? Color(0XFF015C4B) : Color(0XFF202C33),
+                borderRadius: BorderRadius.all(Radius.circular(1.5.h)),
+              ),
+              child: Text(
+                listaMensagens[index],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14.sp,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+
     return Scaffold(
       backgroundColor: Color(0XFF2B2B2B),
       appBar: AppBar(
-        backgroundColor: Color(0XFF096A63),
+        backgroundColor: Color(0XFF015C4B),
         title: Text(
           widget.contato.nome,
           style: TextStyle(
@@ -119,6 +160,7 @@ class _MensagensState extends State<Mensagens> {
             padding: EdgeInsets.all(1.h),
             child: Column(
               children: [
+                listView,
                 caixaMensagem,
               ],
             ),

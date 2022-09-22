@@ -47,7 +47,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return Scaffold(
       backgroundColor: Color(0XFF2B2B2B),
       appBar: AppBar(
-        backgroundColor: Color(0XFF096A63),
+        backgroundColor: Color(0XFF015C4B),
         title: Text(
           "WhatsApp",
           style: TextStyle(
@@ -78,7 +78,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ],
       ),
       bottomNavigationBar: Container(
-        color: Color(0XFF096A63),
+        color: Color(0XFF015C4B),
         child: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,

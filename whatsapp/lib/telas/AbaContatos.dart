@@ -88,7 +88,7 @@ class _AbaContatosState extends State<AbaContatos> {
                         shape:  RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(2.h),
                         ),
-                        color: Color(0XFF096A63),
+                        color: Color(0XFF015C4B),
                         child: Padding(
                           padding: EdgeInsets.all(.5.h),
                           child: Row(
